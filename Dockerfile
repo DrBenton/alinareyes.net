@@ -78,16 +78,22 @@ EXPOSE 3306
 EXPOSE 10000
 
 # Start our services and log in as the dev user
-ENTRYPOINT service nginx start && service mysql start && service webmin start && su - $USER_LOGIN
+ENTRYPOINT service nginx start && service mysql start && service ssh start && service webmin start && su - $USER_LOGIN
 
 
 # How to use this image:
+
 # Once:
 # docker build -t rougemine/grand-tetras-js-ubuntu .
+
 # Then, each time you want to use this image :
-# docker run -i -t -p 2222:22 -p 3307:3306 -p 8080:80 -p 8888:8080 -p 10010:10000 -v $PWD:/host rougemine/grand-tetras-js-ubuntu /bin/bash
+# docker run -i -t -p 3001:3000 -p 2222:22 -p 3307:3306 -p 8080:80 -p 8888:8080 -p 10010:10000 -v $PWD:/host rougemine/grand-tetras-js-ubuntu /bin/bash
+
+# To debug Node.js app, open a SSH tunnel (doesn't work with Passenger: launch the raw Node.js app with the "--debug" flag):
+# ssh -p 2222 -L 5859:localhost:5858 dev-user@localhost
+
 # Commit container changes to its repository:
 # docker ps
 # docker commit <container_id> rougemine/grand-tetras-js-ubuntu
  
-
+# Don't forget to enable Phusion Passenger in /etc/ngninx/nginx.conf (uncomment directives "passenger_root" & "passenger_ruby")
