@@ -1,5 +1,12 @@
 var app = require('./app');
 
-var server = app.listen(3000, function() {
-  console.log('Listening on port %d', server.address().port);
-});
+console.log('Waiting for app initialization...');
+
+app.initPromise.then(function () {
+  console.log('App initialization done.');
+  var server = app.listen(3000, function() {
+    console.log('Listening on port %d', server.address().port);
+  });
+}
+).done();
+

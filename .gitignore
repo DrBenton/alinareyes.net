@@ -8,3 +8,6 @@ node_modules/
 # Passenger env
 tmp/
 
+# Misc files
+*.bak
+

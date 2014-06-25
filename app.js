@@ -1,3 +1,6 @@
+var fs = require('fs');
+var path = require('path');
+
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
@@ -5,11 +8,19 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressLayouts = require('express-ejs-layouts');
+var ini = require('ini');
+var Q = require('q');
+var glob = Q.denodeify(require('glob'));
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+// App config loading & parsing
+var appConfig = ini.parse(fs.readFileSync('./config/main.ini', 'utf-8'));
+app.set('config', appConfig);
+app.set('appRootPath', __dirname);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,5 +73,30 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// Initializers, go!
+app.initPromise = glob('initializers/*.js', { cwd: app.get('appRootPath')})
+  .then(function (files) {
+
+    console.log(files);
+    var allInitializersPromise = Q();
+
+    files.forEach(function (initializerFilePath) {
+      var initializerPromise = require(app.get('appRootPath') + '/' + initializerFilePath);
+      allInitializersPromise = allInitializersPromise.thenResolve(initializerPromise);
+    });
+
+    return allInitializersPromise;
+  });
+
+app.initPromise
+  .then(function () {
+    console.log('Initializers done.');
+  })
+  .fail(function (err) {
+    console.log('Initializers error !', err);
+    console.dir(err);
+    throw err;
+  })
+  .done();
 
 module.exports = app;
