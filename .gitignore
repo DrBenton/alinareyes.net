@@ -1,0 +1,10 @@
+
+# IDE files
+.idea/
+
+# Node.js stuff
+node_modules/
+
+# Passenger env
+tmp/
+
