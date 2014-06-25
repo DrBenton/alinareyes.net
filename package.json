@@ -19,6 +19,10 @@
     "q": "^1.0.1",
     "sails-mysql": "^0.10.0-rc7",
     "static-favicon": "~1.0.0",
+    "underscore.string": "^2.3.3",
     "waterline": "^0.10.0-rc14"
+  },
+  "devDependencies": {
+    "colors": "^0.6.2"
   }
 }
