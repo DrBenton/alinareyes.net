@@ -1,60 +1,48 @@
-var Waterline = require('waterline');
 var _s = require('underscore.string');
 var modelsMixins = require('../mixins/models-mixins');
 
 var BookSchema = {
 
-  identity: 'book',
   tableName: 'books',
-  connection: 'default',
-  schema: true,
+  hasTimestamps: true,
 
-  attributes: {
-    title_fr: {
-      type: 'string',
-      required: true,
-      size: 255
-    },
-    desc_fr: {
-      type: 'text',
-      required: true
-    },
-    slug: {
-      type: 'string',
-      index: true
-    },
-    publication_date: {
-      type: 'date'
-    },
-    price: {
-      type: 'float',
-      required: true
-    },
+  initialize: function() {
+    this.on('saving', this.beforeSave);
+  },
 
-    title: function (req) {
-      // We may add user language management here; but we will only handle french for the moment... :-)
-      return this.title_fr;
-    },
-    desc: function (req) {
-      // idem
-      return this.desc_fr;
+  getTitle: function (req) {
+    // We may add user language management here; but we will only handle french for the moment... :-)
+    return this.get('title_fr');
+  },
+
+  getDesc: function (req) {
+    // idem
+    return this.get('desc_fr');
+  },
+
+  toString: function () {
+    return this.get('title_fr');
+  },
+
+  beforeSave: function () {
+    if (!this.id) {
+      this.set('slug', _s.slugify(this.get('title_fr')));
     }
   },
 
-  beforeCreate: function (values, next) {
-    console.log('beforeCreate()');
-    console.log('values before=', values);
-    values.slug = _s.slugify(values.title_fr);
-    console.log('values after=', values);
-    next();
+  validationRules: {
+    title_fr: ['required', 'minLength:3'],
+    desc_fr: ['required'],
+    publication_date: ['required'],
+    price: ['required']
   }
 
 };
-modelsMixins.autoRecordDates(BookSchema);
-console.log('BookSchema=', BookSchema)
 
-var Book = Waterline.Collection.extend(BookSchema);
+modelsMixins.autoCheck(BookSchema);
 
-
-module.exports = Book;
+module.exports = {
+  identity: 'books',
+  schema: BookSchema
+};
 

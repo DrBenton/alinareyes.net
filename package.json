@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "body-parser": "~1.0.0",
+    "bookshelf": "^0.7.5",
+    "checkit": "^0.2.0-pre",
     "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",
     "ejs": "~0.8.5",
@@ -14,13 +16,13 @@
     "express-ejs-layouts": "^1.1.0",
     "glob": "^4.0.2",
     "ini": "^1.2.1",
+    "knex": "^0.6.18",
     "lodash": "^2.4.1",
     "morgan": "~1.0.0",
+    "mysql": "^2.3.2",
     "q": "^1.0.1",
-    "sails-mysql": "^0.10.0-rc7",
     "static-favicon": "~1.0.0",
-    "underscore.string": "^2.3.3",
-    "waterline": "^0.10.0-rc14"
+    "underscore.string": "^2.3.3"
   },
   "devDependencies": {
     "colors": "^0.6.2"

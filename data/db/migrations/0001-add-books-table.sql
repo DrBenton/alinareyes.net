@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `books` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(255) NOT NULL,
+  `title_fr` VARCHAR(255) NOT NULL,
+  `slug` VARCHAR(255) NULL,
   `desc_fr` TEXT NOT NULL,
   `publication_date` DATE NOT NULL,
   `price` DECIMAL(3,2) NOT NULL,

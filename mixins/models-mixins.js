@@ -1,26 +1,22 @@
 var _ = require('lodash');
+var Checkit = require('checkit');
 
-exports.autoRecordDates = function (collectionSchema) {
+exports.autoCheck = function (modelSchema) {
 
-  var beforeCreate = collectionSchema.beforeCreate;
-  _.extend(collectionSchema, {
-    autoCreatedAt: false,
-    beforeCreate: function (values, next) {
-      console.log('Handle "created_at"...');
-      values.created_at = new Date();
-      if (beforeCreate) {
-        beforeCreate(values, next);
-      } else {
-        next();
-      }
+  var initialize = modelSchema.initialize;
+
+  _.extend(modelSchema, {
+
+    initialize: function () {
+      this.on('saving', this.checkData);
+      initialize && initialize.call(this);
+    },
+
+    checkData: function () {
+      var checkit = Checkit(this.validationRules);
+      return checkit.run(this.attributes);
     }
   });
 
-  _.extend(collectionSchema.attributes, {
-    created_at: {
-      type: 'datetime',
-      required: true
-    }
-  });
 
 };
