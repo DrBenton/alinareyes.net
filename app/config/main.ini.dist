@@ -1,0 +1,12 @@
+[database]
+host = localhost
+username = alinareyes
+password = alinareyes
+dbname = alinareyes
+
+[theme]
+themeUrl = /themes/html5up-strongly-typed
+
+[debug]
+livereload = true
+livereload.port = 35729

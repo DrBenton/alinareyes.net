@@ -1,0 +1,17 @@
+<div class="main-content-container col-sm-8">
+    <div class="main-content">
+        <h1><%= title %></h1>
+        <p>Welcome to <%=: title | upcase %></p>
+        <blockquote>
+            <%= sayHello() %>
+        </blockquote>
+    </div>
+</div>
+<div class="sidebar-container cold-sm-4">
+    <div class="sidebar">
+        sidebar
+    </div>
+</div>
+
+<%- contentFor('footer') %>
+&copy; layout corp.

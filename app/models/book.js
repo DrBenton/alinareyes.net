@@ -39,7 +39,7 @@ var BookSchema = {
 
 };
 
-modelsMixins.autoCheck(BookSchema);
+modelsMixins.applyAutoCheck(BookSchema);
 
 module.exports = {
   identity: 'books',

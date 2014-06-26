@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var Checkit = require('checkit');
 
-exports.autoCheck = function (modelSchema) {
+exports.applyAutoCheck = function (modelSchema) {
 
   var initialize = modelSchema.initialize;
 

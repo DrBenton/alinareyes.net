@@ -12,19 +12,20 @@ var ini = require('ini');
 var Q = require('q');
 var glob = Q.denodeify(require('glob'));
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var routes = require('./app/routes/index');
+var users = require('./app/routes/users');
 
 var app = express();
 
 // App config loading & parsing
-var appConfig = ini.parse(fs.readFileSync('./config/main.ini', 'utf-8'));
+var appConfig = ini.parse(fs.readFileSync('./app/config/main.ini', 'utf-8'));
 app.set('config', appConfig);
 app.set('appRootPath', __dirname);
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'app', 'views'));
 app.set('view engine', 'ejs');
+app.set('layout', 'layouts/main');
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -41,6 +42,7 @@ app.use('/users', users);
 app.locals.sayHello = function () {
   return 'hello old chap!';
 };
+app.locals.themeUrl= appConfig['theme']['themeUrl'];
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -74,14 +76,14 @@ app.use(function(err, req, res, next) {
 });
 
 // Initializers, go!
-app.initPromise = glob('initializers/*.js', { cwd: app.get('appRootPath')})
+app.initPromise = glob('app/initializers/*.js', { cwd: app.get('appRootPath')})
   .then(function (files) {
 
     console.log(files);
     var allInitializersPromise = Q();
 
     files.forEach(function (initializerFilePath) {
-      var initializerPromise = require(app.get('appRootPath') + '/' + initializerFilePath);
+      var initializerPromise = require(path.join(app.get('appRootPath'), initializerFilePath));
       allInitializersPromise = allInitializersPromise.thenResolve(initializerPromise);
     });
 

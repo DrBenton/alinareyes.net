@@ -4,7 +4,7 @@ var Q = require('q');
 var glob = Q.denodeify(require('glob'));
 var _ = require('lodash');
 
-var app = require('../app');
+var app = require('../../app');
 var appConfig = app.get('config');
 
 // Knex DB abstraction init
@@ -25,7 +25,7 @@ var bookshelf = require('bookshelf')(knex);
 // Recursive search of models
 var loadModels = function() {
 
-  var modelsLoadingPromise = glob('models/**/*.js', {cwd: app.get('appRootPath')})
+  var modelsLoadingPromise = glob('app/models/**/*.js', {cwd: app.get('appRootPath')})
     .then(function (modelsFilesPaths) {
 
       var appModels = {
