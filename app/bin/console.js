@@ -13,7 +13,7 @@ require('colors');
 console.log('Starting app in interactive mode...'.magenta);
 
 // Now load up our app
-var app = require('../app');
+var app = require('../../app');
 
 app.initPromise
   .then(function () {
