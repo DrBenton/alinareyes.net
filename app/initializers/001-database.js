@@ -23,7 +23,7 @@ var knex = require('knex')({
 var bookshelf = require('bookshelf')(knex);
 
 // Recursive search of models
-var loadModels = function() {
+function loadModels () {
 
   var modelsLoadingPromise = glob('app/models/**/*.js', {cwd: app.get('appRootPath')})
     .then(function (modelsFilesPaths) {
@@ -36,16 +36,16 @@ var loadModels = function() {
       modelsFilesPaths.forEach(function (modelFilePath) {
         console.log('Model "'+modelFilePath+'" loading...');
         var modelData = require(path.join(app.get('appRootPath'), modelFilePath));
-        console.log('->', modelData);
         var modelIdentity = modelData.identity;
-        var modelSchema = modelData.schema;
-        // The Model and its Collection are added to the ORM
+        // Model management
+        var modelSchema = modelData.modelSchema;
         var model = bookshelf.Model.extend(modelSchema);
         appModels.models[modelIdentity] = model;
-        var collection = bookshelf.Collection.extend({
-          model: model
-        });
-        appModels.collections[modelIdentity] = collection.forge();//our Collections are singletons
+        // Collection management
+        var collectionSchema = modelData.collectionSchema || {};
+        collectionSchema.model = model;
+        var collection = bookshelf.Collection.extend(collectionSchema);
+        appModels.collections[modelIdentity] = collection;
       });
 
       return appModels;
@@ -53,16 +53,26 @@ var loadModels = function() {
 
   return modelsLoadingPromise;
 
-};
+}
 
 // Start Waterline, passing adapters in.
 // We return this init process... as a Promise, as usual! :-)
-module.exports = loadModels()
-  .then(function (models) {
-    console.log(_.size(models.models) + ' Model(s) linked to ORM. Database init process complete!');
-    app.models = models.models;
-    app.collections = models.collections;
-  })
-  .fail(function (err) {
-    throw err;
-  });
+module.exports = function (previousInitializerPromise) {
+  return previousInitializerPromise
+    .then(function () {
+      console.log('loadModels()');
+      return loadModels();
+    })
+    .then(function (models) {
+      console.log(_.size(models.models) + ' Model(s) linked to ORM. Database init process complete!');
+      app.models = models.models;
+      app.collections = {};
+      app.collections._schemas = models.collections;
+      app.collections.get = function (collectionIdentity) {
+        return app.collections._schemas[collectionIdentity].forge();
+      };
+    })
+    .fail(function (err) {
+      throw err;
+    });
+};

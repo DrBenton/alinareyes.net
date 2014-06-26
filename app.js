@@ -1,20 +1,20 @@
+// Node.js core Modules
 var fs = require('fs');
 var path = require('path');
-
+// Third-party Modules
 var express = require('express');
-var path = require('path');
+var ini = require('ini');
+var Q = require('q');
+var glob = Q.denodeify(require('glob'));
+// Express / Connect Middlewares
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressLayouts = require('express-ejs-layouts');
-var ini = require('ini');
-var Q = require('q');
-var glob = Q.denodeify(require('glob'));
+var connectI18n = require('connect-i18n');
 
-var routes = require('./app/routes/index');
-var users = require('./app/routes/users');
-
+// App instance creation
 var app = express();
 
 // App config loading & parsing
@@ -27,6 +27,7 @@ app.set('views', path.join(__dirname, 'app', 'views'));
 app.set('view engine', 'ejs');
 app.set('layout', 'layouts/main');
 
+// Express / Connect Middlewares plugging
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -34,62 +35,26 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
-
-app.use('/', routes);
-app.use('/users', users);
-
-// Views common locals
-app.locals.sayHello = function () {
-  return 'hello old chap!';
-};
-app.locals.themeUrl= appConfig['theme']['themeUrl'];
-
-/// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-/// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+app.use(connectI18n({default_locale: 'fr', handled_locales: ['fr']}));
 
 // Initializers, go!
 app.initPromise = glob('app/initializers/*.js', { cwd: app.get('appRootPath')})
   .then(function (files) {
 
-    console.log(files);
-    var allInitializersPromise = Q();
-
+    var currentInitalizerPromise = Q();//let's start with a fullfilled Promise...
     files.forEach(function (initializerFilePath) {
-      var initializerPromise = require(path.join(app.get('appRootPath'), initializerFilePath));
-      allInitializersPromise = allInitializersPromise.thenResolve(initializerPromise);
+      console.log('Registering initializer "'+path.basename(initializerFilePath)+'"...');
+      var initializer = require(path.join(app.get('appRootPath'), initializerFilePath));
+      var initializerPromise = initializer(currentInitalizerPromise);
+      currentInitalizerPromise = initializerPromise;
     });
 
-    return allInitializersPromise;
+    return currentInitalizerPromise;
   });
 
+// Each Initializer returns a Promise
+// --> our app will be ready to serve when the combination of these Promises,
+// accessible as "app.initPromise", fill be successfully fulfilled.
 app.initPromise
   .then(function () {
     console.log('Initializers done.');

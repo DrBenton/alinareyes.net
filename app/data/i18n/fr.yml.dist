@@ -1,0 +1,11 @@
+
+LANGUAGE: fr
+
+
+home:
+  intro: >
+    <h1>Bienvenue</h1>
+
+    <p>
+    Intro text
+    </p>
