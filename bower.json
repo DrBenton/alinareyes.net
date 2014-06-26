@@ -1,0 +1,16 @@
+{
+  "name": "alinareyes.net",
+  "version": "0.0.0",
+  "authors": [
+    "Olivier Philippon <olivier@rougemine.com>"
+  ],
+  "license": "GPL v2",
+  "description": "Alina Reyes e-books website",
+  "dependencies": {
+    "bootstrap": "~3.1.1"
+  },
+  "keywords": [
+    "ebooks"
+  ],
+  "private": true
+}

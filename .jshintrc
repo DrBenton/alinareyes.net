@@ -1,0 +1,21 @@
+{
+  "browser": true,
+  "indent": 2,
+  "strict": true,
+  "quotmark": "single",
+  "expr": true,
+  "validthis": true,
+  "newcap": false,
+  "es3": true,
+  "sub": true,
+  "undef": true,
+  "trailing": true,
+  "laxbreak": true,
+  "-W058": true,
+
+  "globals": {
+    "requirejs": false,
+    "require": false,
+    "define": false
+  }
+}

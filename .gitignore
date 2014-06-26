@@ -8,6 +8,13 @@ node_modules/
 # Passenger env
 tmp/
 
+# Bower components
+/public/bower_components
+
+# Theme assets
+/public/themes/html5up-strongly-typed/css
+/public/themes/html5up-strongly-typed/fonts
+
 # Misc files
 *.bak
 
