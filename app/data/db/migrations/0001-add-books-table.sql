@@ -8,4 +8,6 @@ CREATE TABLE IF NOT EXISTS `books` (
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NULL,
   PRIMARY KEY (`id`))
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci
 ENGINE = InnoDB;

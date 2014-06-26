@@ -1,0 +1,37 @@
+
+@import "variables";
+@import "../../../bower_components/bootstrap/less/mixins";
+
+.books-list {
+  //display: table;
+}
+.book {
+  list-style-type: none;
+  position: relative;
+  //border: solid lime 1px;
+//  .clearfix();
+  .book-cover {
+    text-align: center;
+    img {
+      border: solid 6px @gray-lightest;
+    }
+  }
+  .book-info {
+    .book-title {
+      margin: 0.5em 0;
+      color: @gray-lighter;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .book-desc {
+    }
+  }
+  .more {
+    margin-top: 0.5em;
+    margin-bottom: 4px;
+    &:before {
+      content: "\e081";//glyphicon-plus-sign
+    }
+  }
+}

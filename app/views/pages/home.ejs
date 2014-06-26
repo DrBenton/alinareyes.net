@@ -1,0 +1,46 @@
+<div class="books-highlight-container clearfix">
+    <div class="books-highlight books-list clearfix">
+        <% highlightedBooks.forEach(function (book) { %>
+            <% include ../partials/book-display %>
+        <% }) %>
+        <div class="books-intro col-sm-4">
+            <h3 class="title"><%=: 'home.books-intro.title'|trans:locale %></h3>
+            <div class="desc">
+                <%- trans('home.books-intro.body' , locale, {
+                    '%nb-books-displayed%': nbBooksDisplayed,
+                    '%nb-books-total%': nbBooksTotal
+                }) %>
+            </div>
+            <a href="#" class="button with-icon all-books-button">
+                <%=: 'home.books-intro.all-books-button' | trans:locale %>
+            </a>
+            <div class="last-books">
+                <div class="caption">
+                    <%=: 'home.books-intro.last-books' | trans:locale %>
+                </div>
+                <ul>
+                    <% lastBooks.forEach(function (book) { %>
+                        <li><a href="#"><%= book.getTitle(locale) %></a></li>
+                    <% }) %>
+                </ul>
+            </div>
+        </div><!-- end .books-intro -->
+    </div>
+</div><!-- end .books-highlight-container -->
+
+<hr>
+
+<div class="main-content-container col-sm-8">
+    <div class="main-content">
+        <%-: 'home.intro' | trans:locale %>
+    </div>
+</div><!-- end .main-content-container -->
+
+<div class="sidebar-container col-sm-4">
+    <div class="sidebar">
+        sidebar
+    </div>
+</div><!-- end .sidebar-container -->
+
+<%- contentFor('footer') %>
+&copy; layout corp.

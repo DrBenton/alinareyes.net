@@ -24,7 +24,7 @@ gulp.task('fonts', function(){
 });
 
 gulp.task('less', function () {
-  return gulp.src('public/themes/html5up-strongly-typed-src/less/**/*.less')
+  return gulp.src('public/themes/html5up-strongly-typed-src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('public/themes/html5up-strongly-typed/css'));
 });

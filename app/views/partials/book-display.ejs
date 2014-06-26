@@ -1,0 +1,12 @@
+<div class="book col-sm-4">
+    <div class="book-cover">
+        <img src="<%= book.getPictureUrl() %>" alt="<%= book.getTitle(locale) %>">
+    </div>
+    <div class="book-info">
+        <h4 class="book-title"><%= book.getTitle(locale) %></h4>
+        <div class="book-desc">
+            <%-: book.getShortDesc(locale) %>
+        </div>
+    </div>
+    <a href="#" class="button with-icon more"><%=: 'common.more' | trans:locale %></a>
+</div>
