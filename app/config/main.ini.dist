@@ -1,3 +1,7 @@
+[general]
+; no trailing slash!
+baseUrl =
+
 [database]
 host = localhost
 username = alinareyes

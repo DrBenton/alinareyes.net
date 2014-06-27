@@ -6,31 +6,15 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res) {
 
-  var nbHightlitedBooks = 2;
   var viewVars = {
     layout: 'layouts/main',
-    locale: req.locales[0],
-    nbBooksDisplayed: nbHightlitedBooks
+    locale: req.locales[0]
   };
 
-  // Model manipulations
-  app.collections.get('books').getHighlightedBooks(nbHightlitedBooks)
-    .then(function (highlightedBooks) {
-      viewVars.highlightedBooks = highlightedBooks;
-    })
-    .then(function () {
-      // Nb books total
-      return app.collections.get('books').query().count('* as count').select();
-    })
-    .then(function (res) {
-      viewVars.nbBooksTotal = res[0].count;
-    })
-    .then(function () {
-      // Last books
-      return app.collections.get('books').getLastBooks();
-    })
-    .then(function (lastBooks) {
-      viewVars.lastBooks = lastBooks;
+  // In Spain, *first* we retrieve data from our Model, *then* we render the View!
+  app.collections.get('books').fetch()
+    .then(function (allBooks) {
+      viewVars.books = allBooks;
     })
     .then(function () {
       // View rendering!

@@ -8,30 +8,56 @@
 .book {
   list-style-type: none;
   position: relative;
+  margin-bottom: 1em;
   //border: solid lime 1px;
 //  .clearfix();
   .book-cover {
     text-align: center;
+    background-color: @gray-lighter;
+    border: solid 6px @gray-lightest;
     img {
-      border: solid 6px @gray-lightest;
+      border-color: white;
+      border-style: solid;
+      border-width: 0 1px;
+      height: 172px;
     }
   }
   .book-info {
-    .book-title {
-      margin: 0.5em 0;
-      color: @gray-lighter;
-      font-weight: 600;
-      text-transform: uppercase;
-      text-align: center;
+    .book-title-container {
+      display: table;
+      width: 100%;
+      .book-title {
+        display: table-cell;
+        height: 45px;
+        vertical-align: middle;
+        width: 100%;
+        margin: 0.5em 0;
+        color: @gray-lighter;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        span {
+        }
+      }
     }
     .book-desc {
+      height: 75px;
+      @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+        height: 100px;
+      }
+      @media (max-width: @screen-xs-max) {
+        height: auto;
+      }
     }
   }
-  .more {
-    margin-top: 0.5em;
-    margin-bottom: 4px;
-    &:before {
-      content: "\e081";//glyphicon-plus-sign
+  .button-container {
+    text-align: center;
+    .more {
+      margin-top: 0.5em;
+      margin-bottom: 4px;
+      &:before {
+        content: "\e081";//glyphicon-plus-sign
+      }
     }
   }
 }

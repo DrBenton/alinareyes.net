@@ -1,22 +1,18 @@
 
 @bootstrap-path: "../../../bower_components/bootstrap/less";
 
+@import "@{bootstrap-path}/normalize";
+
 @import "variables";
 @import "@{bootstrap-path}/mixins";
 @import "@{bootstrap-path}/scaffolding";
 @import "@{bootstrap-path}/utilities";
-@import "@{bootstrap-path}/normalize";
+@import "@{bootstrap-path}/responsive-utilities";
 @import "@{bootstrap-path}/grid";
 @import "@{bootstrap-path}/glyphicons";
 //@import "@{bootstrap-path}/navs";
 //@import "@{bootstrap-path}/navbar";
 //@import "@{bootstrap-path}/forms";
-
-html, body {
-  min-height: 100%;
-  font-face: @font-family-serif;
-
-}
 
 @import "components";
 

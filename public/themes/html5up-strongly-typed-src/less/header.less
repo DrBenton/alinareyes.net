@@ -5,11 +5,16 @@ header {
 
   nav.navbar {
     .navbar-nav {
+      padding: 0;
       li {
         list-style-type: none;
         display: block;
         float: left;
         padding-right: 1.25em;
+        margin-bottom: 8px;
+        @media (max-width: @screen-xs-max) {
+          width: 45%;
+        }
         a {
           &:before {
             font-family: @font-family-glyphicons;

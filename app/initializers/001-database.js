@@ -69,6 +69,9 @@ module.exports = function (previousInitializerPromise) {
       app.collections = {};
       app.collections._schemas = models.collections;
       app.collections.get = function (collectionIdentity) {
+        if (!app.collections._schemas[collectionIdentity]) {
+          throw new Error('No collection "'+collectionIdentity+'" found!');
+        }
         return app.collections._schemas[collectionIdentity].forge();
       };
     })

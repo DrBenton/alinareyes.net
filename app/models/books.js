@@ -20,12 +20,15 @@ var BookSchema = {
   },
 
   getShortDesc: function (locale) {
-    var descr = this.get('desc_' + locale);
-    return descr.substring(0, descr.indexOf('*'));
+    return this.get('desc_short_' + locale);
   },
 
   getPictureUrl: function () {
     return this.get('picture_url');
+  },
+
+  isPaper: function () {
+    return !! this.get('paper');
   },
 
   toString: function () {
