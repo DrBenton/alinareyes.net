@@ -49,17 +49,18 @@ app.initPromise
             return Q(
               booksCollection.create({
                 title_fr: bookData.title,
+                slug: bookData.slug,
                 desc_fr: bookData.summary,
                 desc_short_fr: bookData.summaryMini
                   ? bookData.summaryMini
                   : _s.prune(_s.stripTags(bookData.summary), 120),
-                picture_url: 'http://alinareyes.net/img/books/'+bookData.slug+'.jpg',
                 publication_date: '1980-07-11',
                 price: bookData.price,
                 highlight: false,
                 weight: bookData.weight,
                 is_new: bookData.isNew || 0,
                 nb_pages: bookData.nbPages,
+                nb_pages_preview: bookData.previewNbPages,
                 isbn: bookData.ISBN,
                 paper: !! bookData.paper
               })

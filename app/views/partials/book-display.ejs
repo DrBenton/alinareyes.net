@@ -1,6 +1,7 @@
-<div class="book col-sm-4 <%= book.isPaper() ? 'paper-book' : 'e-book' %>">
+<div class="book book-small-display col-sm-4 <%= book.get('paper') ? 'paper-book' : 'e-book' %>">
     <div class="book-cover">
-        <img src="<%= book.getPictureUrl() %>" alt="<%= book.getTitle(locale) %>">
+        <img src="<%= book.get('cover_small_url') %>"
+             class="img-responsive" alt="<%= book.getTitle(locale) %>">
     </div>
     <div class="book-info">
         <div class="book-title-container">

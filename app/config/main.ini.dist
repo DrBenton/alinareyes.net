@@ -1,6 +1,9 @@
 [general]
 ; no trailing slash!
 baseUrl =
+; no trailing slash!
+bowerComponentsUrl = /bower_components
+blogUrl = http://journal.alinareyes.net/
 
 [database]
 host = localhost
@@ -9,8 +12,14 @@ password = alinareyes
 dbname = alinareyes
 
 [theme]
+; no trailing slash!
 themeUrl = /themes/html5up-strongly-typed
 
 [debug]
 livereload = true
 livereload.port = 35729
+
+[books]
+cover.small.url = http://alinareyes.net/img/books/%book-slug%.jpg
+cover.large.url = http://alinareyes.net/img/books/%book-slug%.big.jpg
+preview.page.url = http://alinareyes.net/img/books/preview/%book-slug%/page-%page-num%.png

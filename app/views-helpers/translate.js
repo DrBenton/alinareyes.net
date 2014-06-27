@@ -18,11 +18,8 @@ app.locals.trans = function(i18nKey, locale, interpolationHash) {
     } else {
       var result = currentI18nScope[currentKeyPart];
       if (interpolationHash) {
-        _.forEach(interpolationHash, function (value, key) {
-          result = result.replace(key, value);
-        });
+        result = app.locals.interpolate(result, interpolationHash);
       }
-
       return result;
     }
   }

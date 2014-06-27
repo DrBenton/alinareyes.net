@@ -16,7 +16,7 @@ router.param('book_slug', function(req, res, next, slug) {
 router.get('/:book_slug', function(req, res) {
 
   var viewVars = {
-    layout: 'layouts/main',
+    layout: 'layouts/layout-main',
     locale: req.locales[0],
     book: req.book
   };

@@ -1,9 +1,88 @@
-<div class="book-full-display col-sm-8">
-    <h2><%= book.getTitle(locale) %></h2>
-    <div class="book-cover">
-        <img src="<%= book.getPictureUrl() %>" alt="<%= book.getTitle(locale) %>">
-    </div>
+<div class="clearfix">
+
+    <div class="book book-full-display col-sm-9">
+        <h2><%= book.getTitle(locale) %></h2>
+        <div class="book-cover col-sm-4">
+            <img src="<%= book.get('cover_large_url') %>"
+                 class="img-responsive" alt="<%= book.getTitle(locale) %>">
+        </div>
+        <div class="book-desc-container col-sm-8">
+            <%- book.getDesc(locale) %>
+        </div>
+    </div><!-- end .book-full-display -->
+
+    <div class="book-full-display-sidebar sidebar sidebar-right col-sm-3">
+        <div class="block-container clearfix">
+            <div class="block block-buy">
+                <h3 class="block-title">
+                    <%=: 'book-display.block.buy.title'|trans:locale %>
+                </h3>
+                <div class="book-title">
+                    <%= book.getTitle(locale) %>
+                </div>
+                <div class="book-nb-pages">
+                    <%- trans('book-display.block.buy.nb_pages', locale, {
+                        '%nb-pages%': book.get('nb_pages')
+                    }) %>
+                </div>
+                <div class="book-price">
+                    <%- trans('book-display.block.buy.price', locale, {
+                        '%price%': book.get('price')
+                    }) %>
+                </div>
+                <div class="book-isbn">
+                    <%- trans('book-display.block.buy.isbn', locale, {
+                        '%isbn%': book.get('isbn')
+                    }) %>
+                </div>
+                <div class="button-container">
+                    <a href="<%= baseUrl %>/books/<%= book.get('slug') %>/buy" class="button with-icon book-buy">
+                        <%=: 'book-display.block.buy.buy' | trans:locale %>
+                    </a>
+                </div>
+            </div><!-- end .block-buy -->
+        </div><!-- end .block-container-->
+    </div><!-- end .book-full-display-sidebar -->
+
 </div>
-<div class="book-full-display-sidebar col-sm-4">
-    sidebar
-</div>
+
+<hr>
+
+<div class="book-preview-container col-lg-12">
+    <h3 class="block-title with-icon">
+        <%= trans('book-display.preview.title', locale, {'%book-title%': book.getTitle(locale)}) %>
+    </h3>
+    <p class="intro">
+        <%- trans('book-display.preview.intro', locale, {'%book-title%': book.getTitle(locale)}) %>
+    </p>
+    <div class="book-preview clearfix">
+        <ul id="book-preview-carousel" class="hidden">
+            <% _.range(1, book.get('nb_pages_preview')).forEach( function (i) { %>
+                <li>
+                    <img data-lazy="<%= book.getPagePreviewUrl(i) %>"
+                         class="img-responsive" alt="">
+                </li>
+            <% }) %>
+        </ul>
+    </div><!-- end .book-preview -->
+</div><!-- end .book-preview-container -->
+
+<%- contentFor('stylesheets') %>
+<link rel="stylesheet" href="<%= bowerComponentsUrl %>/slick.js/slick/slick.css">
+
+<%- contentFor('javascripts') %>
+<script src="<%= bowerComponentsUrl %>/jquery/dist/jquery.min.js"></script>
+<script src="<%= bowerComponentsUrl %>/slick.js/slick/slick.min.js"></script>
+<script>
+    //TODO: handle this with Twitter Flight
+    $(document).ready(function() {
+        $('#book-preview-carousel')
+            .slick({
+                dots: true,
+                speed: 200,
+                slide: 'li',
+                lazyLoad: 'progressive'
+            })
+            .removeClass('hidden').show();
+    });
+</script>

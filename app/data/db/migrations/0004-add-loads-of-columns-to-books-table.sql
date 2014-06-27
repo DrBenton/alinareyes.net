@@ -1,6 +1,6 @@
 ALTER TABLE `books`
 CHANGE COLUMN `slug` `slug` VARCHAR(255) NOT NULL AFTER `id`,
-CHANGE COLUMN `desc_fr` `desc_fr` VARCHAR(255) NOT NULL ,
+CHANGE COLUMN `desc_fr` `desc_fr` TEXT NOT NULL ,
 CHANGE COLUMN `updated_at` `updated_at` DATETIME NOT NULL ,
 ADD COLUMN `desc_short_fr` VARCHAR(255) NOT NULL AFTER `desc_fr`,
 ADD COLUMN `weight` TINYINT(3) UNSIGNED NOT NULL AFTER `highlight`,

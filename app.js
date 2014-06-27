@@ -25,7 +25,7 @@ app.set('appRootPath', __dirname);
 // view engine setup
 app.set('views', path.join(__dirname, 'app', 'views'));
 app.set('view engine', 'ejs');
-app.set('layout', 'layouts/main');
+app.set('layout', 'layouts/layout-main');
 
 // Express / Connect Middlewares plugging
 app.use(favicon());

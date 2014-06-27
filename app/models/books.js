@@ -1,5 +1,9 @@
 var _s = require('underscore.string');
+
+var app = require('../../app');
 var modelsMixins = require('../mixins/models-mixins');
+
+var appConfig = app.get('config');
 
 // Model definition schema
 var BookSchema = {
@@ -23,12 +27,28 @@ var BookSchema = {
     return this.get('desc_short_' + locale);
   },
 
-  getPictureUrl: function () {
-    return this.get('picture_url');
+  getPagePreviewUrl: function (pageNum) {
+      // Mixing app config, View helper and Model. This is baaaad...
+    return app.locals.interpolate(appConfig.books['preview.page.url'], {
+      '%book-slug%': this.get('slug'),
+      '%page-num%': _s.pad(pageNum, 3, '0')
+    });
   },
 
-  isPaper: function () {
-    return !! this.get('paper');
+  virtuals: {
+    cover_small_url: function () {
+      return app.locals.interpolate(appConfig.books['cover.small.url'], {
+        '%book-slug%': this.get('slug')
+      });
+    },
+    cover_large_url: function () {
+      return app.locals.interpolate(appConfig.books['cover.large.url'], {
+        '%book-slug%': this.get('slug')
+      });
+    },
+    large_picture_url: function () {
+      return this.get('picture_url').replace(/\.([^.]+)$/, '.big.$1');
+    }
   },
 
   toString: function () {
@@ -36,7 +56,7 @@ var BookSchema = {
   },
 
   beforeSave: function () {
-    if (!this.id) {
+    if (!this.id && !this.get('slug')) {
       this.set('slug', _s.slugify(this.get('title_fr')));
     }
   },

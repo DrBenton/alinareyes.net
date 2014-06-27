@@ -14,9 +14,17 @@
 //@import "@{bootstrap-path}/navbar";
 //@import "@{bootstrap-path}/forms";
 
-@import "components";
+@import "components/misc-components";
+@import "components/slick-carousel";
 
-@import "header";
-@import "footer";
-@import "books";
-@import "home";
+@import "common/header";
+@import "common/footer";
+@import "common/books";
+
+@import "pages/home";
+@import "pages/book-display";
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  text-transform: uppercase;
+}

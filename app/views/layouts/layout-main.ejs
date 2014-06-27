@@ -11,7 +11,10 @@
 
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Arvo:700" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="<%= themeUrl %>/css/main.css">
-    <!-- <script src="<%= themeUrl %>/js/vendor/modernizr-2.8.0.min.js"></script> -->
+    <%- (typeof stylesheets == 'undefined') ? '' : stylesheets %>
+
+    <script src="<%= bowerComponentsUrl %>/modernizr/modernizr.js"></script>
+
 </head>
 <body>
 <!--[if lt IE 8]>
@@ -35,6 +38,8 @@
 </div>
 
 <% include ../common/footer %>
+
+<%- (typeof javascripts == 'undefined') ? '' : javascripts %>
 
 <!--
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

@@ -3,12 +3,14 @@ var path = require('path');
 var Q = require('q');
 var glob = Q.denodeify(require('glob'));
 var _ = require('lodash');
+var Knex = require('knex');
+var Bookshelf = require('bookshelf');
 
 var app = require('../../app');
 var appConfig = app.get('config');
 
 // Knex DB abstraction init
-var knex = require('knex')({
+var knex = Knex({
   client: 'mysql',
   connection: {
     host     : appConfig['database']['host'],
@@ -20,7 +22,10 @@ var knex = require('knex')({
 });
 
 // Bookshelf ORM init
-var bookshelf = require('bookshelf')(knex);
+var bookshelf = Bookshelf(knex);
+
+// Bookshelf plugins
+bookshelf.plugin('virtuals');
 
 // Recursive search of models
 function loadModels () {
