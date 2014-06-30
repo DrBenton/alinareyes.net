@@ -1,70 +1,84 @@
 <div class="page page-book-full-display clearfix">
 
-    <div class="clearfix">
-        <div class="book book-full-display col-sm-9">
-            <div class="block-title"><%=: 'book-full-display.blocks.book.title' | trans:locale %></div>
-            <h2><%= book.getTitle(locale) %></h2>
-            <div class="book-cover col-sm-4">
-                <img src="<%= book.get('cover_large_url') %>"
-                     class="img-responsive" alt="<%= book.getTitle(locale) %>">
-            </div>
-            <div class="book-desc-container col-sm-8">
-                <%- book.getDesc(locale) %>
+    <div class="row">
+        <div class="block-container book-full-display col-md-8">
+            <div class="block-container">
+                <div class="block block-book">
+                    <h3 class="block-title">
+                        <%=: 'book-full-display.blocks.book.title'|trans:locale %>
+                    </h3>
+                    <div class="block-content">
+                        <div class="book-cover col-sm-4">
+                            <img src="<%= book.get('cover_large_url') %>"
+                                 class="img-responsive" alt="<%= book.getTitle(locale) %>">
+                        </div>
+                        <div class="book-desc-container col-sm-8">
+                            <h2><%= book.getTitle(locale) %></h2>
+                            <%- book.getDesc(locale) %>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div><!-- end .book-full-display -->
 
-        <div class="book-full-display-sidebar sidebar sidebar-right col-sm-3">
+        <div class="book-full-display-sidebar sidebar sidebar-right col-md-3">
             <div class="block-container clearfix">
                 <div class="block block-buy">
                     <h3 class="block-title">
                         <%=: 'book-full-display.blocks.buy.title'|trans:locale %>
                     </h3>
-                    <div class="book-title">
-                        <%= book.getTitle(locale) %>
-                    </div>
-                    <div class="book-nb-pages">
-                        <%- trans('common.nb_pages', locale, {
-                            '%nb-pages%': book.get('nb_pages')
-                        }) %>
-                    </div>
-                    <div class="book-price">
-                        <%= price(book.get('price'), locale) %>
-                    </div>
-                    <div class="book-isbn">
-                        <%- trans('common.isbn', locale, {
-                            '%isbn%': book.get('isbn')
-                        }) %>
-                    </div>
-                    <div class="button-container">
-                        <a href="<%= baseUrl %>/books/<%= book.get('slug') %>/buy" class="button with-icon book-buy">
-                            <%=: 'book-full-display.blocks.buy.buy' | trans:locale %>
-                        </a>
-                    </div>
+                    <div class="block-content">
+                        <div class="book-title">
+                            <%= book.getTitle(locale) %>
+                        </div>
+                        <div class="book-nb-pages">
+                            <%- trans('common.nb_pages', locale, {
+                                '%nb-pages%': book.get('nb_pages')
+                            }) %>
+                        </div>
+                        <div class="book-price">
+                            <%= price(book.get('price'), locale) %>
+                        </div>
+                        <div class="book-isbn">
+                            <%- trans('common.isbn', locale, {
+                                '%isbn%': book.get('isbn')
+                            }) %>
+                        </div>
+                        <div class="button-container">
+                            <a href="<%= baseUrl %>/books/<%= book.get('slug') %>/buy" class="button with-icon book-buy">
+                                <%=: 'book-full-display.blocks.buy.buy' | trans:locale %>
+                            </a>
+                        </div>
+                    </div><!-- end .block-content -->
                 </div><!-- end .block-buy -->
             </div><!-- end .block-container-->
         </div><!-- end .book-full-display-sidebar -->
 
-    </div><!-- end .clearfix -->
+    </div><!-- end .row -->
 
     <hr>
 
-    <div class="book-preview-container col-lg-12">
-        <h3 class="block-title with-icon">
-            <%= trans('book-full-display.blocks.preview.title', locale, {'%book-title%': book.getTitle(locale)}) %>
-        </h3>
-        <p class="intro">
-            <%- trans('book-full-display.blocks.preview.intro', locale, {'%book-title%': book.getTitle(locale)}) %>
-        </p>
-        <div class="book-preview clearfix">
-            <ul id="book-preview-carousel" class="hidden">
-                <% _.range(1, book.get('nb_pages_preview')).forEach( function (i) { %>
-                    <li>
-                        <img data-lazy="<%= book.getPagePreviewUrl(i) %>"
-                             class="img-responsive" alt="">
-                    </li>
-                <% }) %>
-            </ul>
-        </div><!-- end .book-preview -->
+    <div class="block-container book-preview-container col-lg-12">
+        <div class="block">
+            <h3 class="block-title with-icon">
+                <%= trans('book-full-display.blocks.preview.title', locale, {'%book-title%': book.getTitle(locale)}) %>
+            </h3>
+            <div class="block-content">
+                <p class="intro">
+                    <%- trans('book-full-display.blocks.preview.intro', locale, {'%book-title%': book.getTitle(locale)}) %>
+                </p>
+                <div class="book-preview clearfix">
+                    <ul id="book-preview-carousel" class="hidden">
+                        <% _.range(1, book.get('nb_pages_preview')).forEach( function (i) { %>
+                            <li>
+                                <img data-lazy="<%= book.getPagePreviewUrl(i) %>"
+                                     class="img-responsive" alt="">
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div><!-- end .book-preview -->
+            </div>
+        </div>
     </div><!-- end .book-preview-container -->
 
 </div><!-- end .page -->

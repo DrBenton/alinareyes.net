@@ -1,8 +1,8 @@
 <div class="page page-home">
 
-    <div class="block-container block-container-books">
+    <div class="block-container block-container-books col-lg-12">
         <div class="block">
-            <h3 class="block-title"><%=: 'home.books.title' | trans:locale %></h3>
+            <h3 class="block-title"><%=: 'home.blocks.books.title' | trans:locale %></h3>
             <div class="block-content">
                 <% books.forEach(function (book) { %>
                     <% include ../partials/book-display %>
@@ -15,7 +15,7 @@
 
     <div class="block-container block-main-content-container col-sm-8">
         <div class="block">
-            <h3 class="block-title"><%=: 'home.books.title' | trans:locale %></h3>
+            <h3 class="block-title"><%=: 'home.blocks.books.title' | trans:locale %></h3>
             <div class="block-content main-content">
                 <%-: 'home.intro' | trans:locale %>
             </div>
