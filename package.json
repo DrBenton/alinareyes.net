@@ -9,6 +9,7 @@
     "body-parser": "~1.0.0",
     "bookshelf": "^0.7.5",
     "checkit": "^0.2.0-pre",
+    "connect-i18n": "git://github.com/DrBenton/connect-i18n.git#add-handled-languages-enum",
     "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",
     "ejs": "~0.8.5",
@@ -23,8 +24,8 @@
     "q": "^1.0.1",
     "require-yaml": "0.0.1",
     "static-favicon": "~1.0.0",
-    "underscore.string": "^2.3.3",
-    "connect-i18n": "git://github.com/DrBenton/connect-i18n.git#add-handled-languages-enum"
+    "stripe": "^2.7.3",
+    "underscore.string": "^2.3.3"
   },
   "devDependencies": {
     "colors": "^0.6.2",

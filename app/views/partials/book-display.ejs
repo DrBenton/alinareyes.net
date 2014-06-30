@@ -10,6 +10,15 @@
         <div class="book-desc">
             <%- _s.stripTags(book.getShortDesc(locale)) %>
         </div>
+        <div class="book-price-nb-pages">
+            <span class="book-price">
+                <%= price(book.get('price'), locale) %>
+            </span>
+            -
+            <span class="book-nb-pages">
+                <%= trans('common.nb_pages', locale, {'%nb-pages%': book.get('nb_pages')}) %>
+            </span>
+        </div>
     </div>
     <div class="button-container">
         <a href="<%= baseUrl %>/books/<%= book.get('slug') %>" class="button with-icon more">

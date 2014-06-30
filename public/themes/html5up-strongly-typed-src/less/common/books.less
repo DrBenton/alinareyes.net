@@ -25,24 +25,27 @@
   &.book-small-display .book-cover img {
     height: 172px;
   }
-  .book-info {
-    .book-title-container {
-      display: table;
+  .book-title-container {
+    display: table;
+    width: 100%;
+    .book-title {
+      display: table-cell;
+      height: 45px;
+      vertical-align: middle;
       width: 100%;
-      .book-title {
-        display: table-cell;
-        height: 45px;
-        vertical-align: middle;
-        width: 100%;
-        margin: 0.5em 0;
-        color: @gray-lighter;
-        font-weight: 600;
-        text-transform: uppercase;
-        text-align: center;
-        span {
-        }
+      margin: 0.5em 0;
+      color: @gray-lighter;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-align: center;
+      span {
       }
     }
+  }
+  .book-desc-container {
+    text-align: justify;
+  }
+  &.book-small-display {
     .book-desc {
       height: 75px;
       @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
@@ -52,14 +55,20 @@
         height: auto;
       }
     }
-  }
-  .button-container {
-    text-align: center;
-    .more {
-      margin-top: 0.5em;
-      margin-bottom: 4px;
-      &:before {
-        content: "\e081";//glyphicon-plus-sign
+    .book-price {
+      font-weight: bold;
+    }
+    .book-nb-pages {
+      font-weight: bold;
+    }
+    .button-container {
+      text-align: center;
+      .more {
+        margin-top: 0.5em;
+        margin-bottom: 4px;
+        &:before {
+          content: "\e081";//glyphicon-plus-sign
+        }
       }
     }
   }

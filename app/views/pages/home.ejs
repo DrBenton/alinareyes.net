@@ -1,24 +1,34 @@
-<div class="books-container clearfix">
-    <div class="books-list clearfix">
-        <% books.forEach(function (book) { %>
-            <% include ../partials/book-display %>
-        <% }) %>
-    </div>
-</div><!-- end .books-container -->
+<div class="page page-home">
 
-<hr>
+    <div class="block-container block-container-books">
+        <div class="block">
+            <h3 class="block-title"><%=: 'home.books.title' | trans:locale %></h3>
+            <div class="block-content">
+                <% books.forEach(function (book) { %>
+                    <% include ../partials/book-display %>
+                <% }) %>
+            </div>
+        </div>
+    </div><!-- end .books-container -->
 
-<div class="main-content-container col-sm-8">
-    <div class="main-content">
-        <%-: 'home.intro' | trans:locale %>
-    </div>
-</div><!-- end .main-content-container -->
+    <hr>
 
-<div class="sidebar-container col-sm-4">
-    <div class="sidebar">
-        sidebar
-    </div>
-</div><!-- end .sidebar-container -->
+    <div class="block-container block-main-content-container col-sm-8">
+        <div class="block">
+            <h3 class="block-title"><%=: 'home.books.title' | trans:locale %></h3>
+            <div class="block-content main-content">
+                <%-: 'home.intro' | trans:locale %>
+            </div>
+        </div>
+    </div><!-- end .main-content-container -->
+
+    <div class="sidebar-container col-sm-4">
+        <div class="sidebar">
+            sidebar
+        </div>
+    </div><!-- end .sidebar-container -->
+
+</div><!-- end .page -->
 
 <%- contentFor('stylesheets') %>
 <link rel="stylesheet" href="<%= bowerComponentsUrl %>/slick.js/slick/slick.css">
