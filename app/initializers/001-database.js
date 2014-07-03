@@ -24,6 +24,9 @@ var knex = Knex({
 // Bookshelf ORM init
 var bookshelf = Bookshelf(knex);
 
+// Let's attach it to the application
+app.set('bookshelf', bookshelf);
+
 // Bookshelf plugins
 bookshelf.plugin('virtuals');
 
@@ -43,14 +46,9 @@ function loadModels () {
         var modelData = require(path.join(app.get('appRootPath'), modelFilePath));
         var modelIdentity = modelData.identity;
         // Model management
-        var modelSchema = modelData.modelSchema;
-        var model = bookshelf.Model.extend(modelSchema);
-        appModels.models[modelIdentity] = model;
+        appModels.models[modelIdentity] = modelData.model;
         // Collection management
-        var collectionSchema = modelData.collectionSchema || {};
-        collectionSchema.model = model;
-        var collection = bookshelf.Collection.extend(collectionSchema);
-        appModels.collections[modelIdentity] = collection;
+        appModels.collections[modelIdentity] = modelData.collection;
       });
 
       return appModels;

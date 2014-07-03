@@ -2,6 +2,12 @@ var app = require('../../app');
 var _ = require('lodash');
 
 app.locals.trans = function(i18nKey, locale, interpolationHash) {
+
+  // Raw message (probably from a debug cotext): no translation
+  if (!_.isString(i18nKey) || -1 === i18nKey.indexOf('.')) {
+    return i18nKey;
+  }
+
   var i18nKeyArray = i18nKey.split('.');
   if (!app.i18n[locale]) {
     return '[unhandled locale "'+locale+'"]';

@@ -30,7 +30,11 @@
                 <div class="block-container clearfix">
                     <div class="block block-buy">
                         <h3 class="block-title">
-                            {{ 'book-full-display.blocks.buy.title' | trans(locale) }}
+                            {% if book.isFree() %}
+                                {{ 'book-full-display.blocks.buy.title-free' | trans(locale) }}
+                            {% else %}
+                                {{ 'book-full-display.blocks.buy.title' | trans(locale) }}
+                            {% endif %}
                         </h3>
                         <div class="block-content">
                             <div class="book-title">
@@ -50,9 +54,15 @@
                                 }) | safe }}
                             </div>
                             <div class="button-container">
-                                <a href="{{ baseUrl }}/books/{{ book.get('slug') }}/buy" class="button with-icon book-buy">
-                                    {{ 'book-full-display.blocks.buy.buy' | trans(locale) }}
-                                </a>
+                                {% if book.isFree() %}
+                                    <a href="{{ baseUrl }}/books/{{ book.get('slug') }}/download" class="button with-icon book-download">
+                                        {{ 'book-full-display.blocks.buy.buy-free' | trans(locale) }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ baseUrl }}/books/{{ book.get('slug') }}/buy" class="button with-icon book-buy">
+                                        {{ 'book-full-display.blocks.buy.buy' | trans(locale) }}
+                                    </a>
+                                {% endif %}
                             </div>
                         </div><!-- end .block-content -->
                     </div><!-- end .block-buy -->

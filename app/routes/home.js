@@ -12,7 +12,9 @@ router.get('/', function(req, res) {
   };
 
   // In Spain, *first* we retrieve data from our Model, *then* we render the View!
-  app.collections.get('books').fetch()
+  app.collections.get('books')
+    .query({where: {enabled: 1}})
+    .fetch()
     .then(function (allBooks) {
       viewVars.books = allBooks;
     })

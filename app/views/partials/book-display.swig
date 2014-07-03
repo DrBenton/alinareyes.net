@@ -6,10 +6,14 @@
     </div>
     <div class="book-info">
         <div class="book-title-container">
-            <h4 class="book-title"><span>{{ book.getTitle(locale) }}{{ book.get('paper')
-                ? ' - ' + trans('common.is_paper', locale)
-                : ''
-             }}</span></h4>
+            <h4 class="book-title">
+                <span>
+                    {{ book.getTitle(locale) }}
+                    {% if book.get('paper') %}
+                        - {{ trans('common.is_paper', locale) }}
+                    {% endif %}
+                </span>
+            </h4>
         </div>
         <div class="book-desc">
             {{  _s.stripTags(book.getShortDesc(locale)) | safe }}

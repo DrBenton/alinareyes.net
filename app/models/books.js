@@ -1,3 +1,4 @@
+var Q = require('q');
 var _s = require('underscore.string');
 
 var app = require('../../app');
@@ -25,6 +26,10 @@ var BookSchema = {
 
   getShortDesc: function (locale) {
     return this.get('desc_short_' + locale);
+  },
+
+  isFree : function () {
+    return 0 === this.get('price');
   },
 
   getPagePreviewUrl: function (pageNum) {
@@ -73,39 +78,49 @@ var BookSchema = {
 
 modelsMixins.applyAutoCheck(BookSchema);
 
+// Model initialization from schema
+var Book = app.get('bookshelf').Model.extend(BookSchema);
+
 
 // Collection definition schema
 var BookCollectionSchema = {
 
+  model: Book,
+
   getLastBooks: function (limit) {
     var queryData = {
+      enabled: 1,
       orderBy: ['created_at', 'desc']
     };
     if (undefined != limit)
       queryData.limit = limit;
 
-    return this.query(queryData).fetch();
+    return Q(this.query(queryData).fetch());
   },
 
   getHighlightedBooks: function (limit) {
     var queryData = {
       where: {
+        enabled: 1,
         highlight: 1
       }
     };
     if (undefined != limit)
       queryData.limit = limit;
 
-    return this.query(queryData).fetch();
+    return Q(this.query(queryData).fetch());
   }
 
 };
+
+// Collection initialization from schema
+var BookCollection = app.get('bookshelf').Collection.extend(BookCollectionSchema);
 
 
 // Module exports
 module.exports = {
   identity: 'books',
-  modelSchema: BookSchema,
-  collectionSchema: BookCollectionSchema
+  model: Book,
+  collection: BookCollection
 };
 
