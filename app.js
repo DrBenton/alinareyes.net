@@ -6,12 +6,12 @@ var express = require('express');
 var ini = require('ini');
 var Q = require('q');
 var glob = Q.denodeify(require('glob'));
+var swig = require('swig');
 // Express / Connect Middlewares
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var expressLayouts = require('express-ejs-layouts');
 var i18n = require('connect-i18n');
 var sessions = require('client-sessions');
 var flash = require('connect-flash');
@@ -26,8 +26,8 @@ app.set('appRootPath', __dirname);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app', 'views'));
-app.set('view engine', 'ejs');
-app.set('layout', 'layouts/layout-main');
+app.engine('swig', swig.renderFile);
+app.set('view engine', 'swig');
 
 // Express / Connect Middlewares plugging
 app.use(favicon());
@@ -36,13 +36,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(sessions({
-  cookieName: 'sid', // cookie name dictates the key name added to the request object
+  cookieName: 'session', // cookie name dictates the key name added to the request object
   secret: 'blargadeeblargblarg', // should be a large unguessable string
   duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
   activeDuration: 1000 * 60 * 5 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
 }));
 app.use(flash());
-app.use(expressLayouts);
 app.use(i18n({default_locale: 'fr', handled_locales: ['fr']}));
 app.use(express.static(path.join(__dirname, 'public')));
 

@@ -18,7 +18,6 @@ router.param('book_slug', function(req, res, next, slug) {
 router.get('/:book_slug', function(req, res) {
 
   var viewVars = {
-    layout: 'layouts/layout-main',
     locale: req.locales[0],
     req: req,
     book: req.book
@@ -32,7 +31,6 @@ router.get('/:book_slug', function(req, res) {
 router.get('/:book_slug/buy', function(req, res) {
 
   var viewVars = {
-    layout: 'layouts/layout-main',
     locale: req.locales[0],
     req: req,
     book: req.book
@@ -46,7 +44,6 @@ router.get('/:book_slug/buy', function(req, res) {
 router.post('/:book_slug/buy', function(req, res) {
 
   var viewVars = {
-    layout: 'layouts/layout-main',
     locale: req.locales[0],
     req: req,
     book: req.book

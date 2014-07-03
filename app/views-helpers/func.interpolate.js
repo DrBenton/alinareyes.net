@@ -1,4 +1,3 @@
-var ejs = require('ejs');
 var app = require('../../app');
 var _ = require('lodash');
 

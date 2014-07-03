@@ -10,10 +10,10 @@
     <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
 
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Arvo:700" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="<%= themeUrl %>/css/main.css">
-    <%- (typeof stylesheets == 'undefined') ? '' : stylesheets %>
+    <link rel="stylesheet" href="{{ themeUrl }}/css/main.css">
+    {% block stylesheets %}{% endblock %}
 
-    <script src="<%= bowerComponentsUrl %>/modernizr/modernizr.js"></script>
+    <script src="{{ bowerComponentsUrl }}/modernizr/modernizr.js"></script>
 
 </head>
 <body>
@@ -24,27 +24,27 @@
 <div id="site-container-wrapper" class="container">
     <div id="site-container">
         <header>
-            <% include ../common/top-nav %>
+            {% include '../common/top-nav.swig' %}
             <h1>AlinaReyes.net</h1>
             <h2>Le site d'édition en ligne d'Alina Reyes</h2>
         </header>
         <hr>
         <div id="main-container-wrapper">
             <div id="main-container">
-                <% /* include ../common/alerts-display */ %>
-                <%- body %>
+                {% include '../common/alerts-display.swig' %}
+                {% block content %}{% endblock %}
             </div>
         </div>
     </div>
 </div>
 
-<% include ../common/footer %>
+{% include '../common/footer.swig' %}
 
-<%- (typeof javascripts == 'undefined') ? '' : javascripts %>
+{% block javascripts %}{% endblock %}
 
 <!--
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="<%= themeUrl %>/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="{{ themeUrl }}/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
 <script src="js/plugins.js"></script>
 <script src="js/main.js"></script>
 -->
