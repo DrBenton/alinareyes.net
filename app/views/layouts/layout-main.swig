@@ -31,6 +31,7 @@
         <hr>
         <div id="main-container-wrapper">
             <div id="main-container">
+                <div>[Session Debug : <code>{{ req.session | json }}</code>]</div>
                 {% include '../common/alerts-display.swig' %}
                 {% block content %}{% endblock %}
             </div>

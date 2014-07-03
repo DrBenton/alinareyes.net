@@ -4,8 +4,8 @@
         {{ 'common.alerts.errors.intro' | trans(locale) }}
     </div>
     <ul class="alerts-container alerts-container-errors">
-    {% for errorMsg in errors %}
-        <li class="alert alert-danger" role="alert">{{ errorMsg }}</li>
+    {% for errorMsgKey in errors %}
+        <li class="alert alert-danger" role="alert">{{ errorMsgKey | trans(locale) }}</li>
     {% endfor %}
     </ul>
     <hr>

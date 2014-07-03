@@ -1,6 +1,7 @@
 var express = require('express');
 var app = require('../../app');
 
+var appConfig = app.get('config');
 var router = express.Router();
 
 // Router specific middlewares & params handlers
@@ -55,13 +56,23 @@ router.post('/:book_slug/buy', function(req, res) {
     .then(
       function (charge) {
         viewVars.charge = charge;
-        // View rendering!
-        res.render('pages/book-download', viewVars);
+        // Yeah! Let's save the token in session, and redirect to the download page!
+        req.session.booksChargesIds = req.session.booksChargesIds || [];
+        req.session.booksChargesIds.push(charge.id);
+        var targetUrl = appConfig.general.baseUrl + '/books/' + req.book.get('slug') + '/download';
+        res.redirect(targetUrl);
       },
       function (err) {
         viewVars.paymentError = err;
-        req.flash('errors', err.raw.type);
-        res.redirect(app.get('config').general.baseUrl + '/books/' + req.book.get('slug') + '/buy');
+        // Let's flash the error type...
+        var errorCode = 'error.stripe.' + err.raw.type;
+        if ('card_error' === err.raw.type) {
+          errorCode += '.' + err.raw.code;
+        }
+        req.flash('error', errorCode);
+        // ...then redirect to the "buy book" page!
+        var targetUrl = appConfig.general.baseUrl + '/books/' + req.book.get('slug') + '/buy';
+        res.redirect(targetUrl);
       }
     )
     .done();
