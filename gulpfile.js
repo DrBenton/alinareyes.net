@@ -29,6 +29,14 @@ gulp.task('less', function () {
     .pipe(gulp.dest('public/themes/html5up-strongly-typed/css'));
 });
 
+gulp.task('restart-passenger', function () {
+  fs.writeSync(fs.openSync(__dirname + '/tmp/restart.txt', 'w'), '');
+});
+
+gulp.task('deploy', ['fonts', 'less', 'restart-passenger'], function () {
+  console.log('Site deployed.');
+});
+
 gulp.task('watch', ['less'], function() {
 
   console.log('LESS files watching starts.');
