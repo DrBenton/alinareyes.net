@@ -20,7 +20,7 @@ livereload = true
 livereload.port = 35729
 
 [books]
-cover.small.url = http://alinareyes.net/img/books/%book-slug%.jpg
+cover.small.url = %base-url%/books/%book-slug%.landscape.jpg
 cover.large.url = http://alinareyes.net/img/books/%book-slug%.big.jpg
 preview.page.url = http://alinareyes.net/img/books/preview/%book-slug%/page-%page-num%.png
 

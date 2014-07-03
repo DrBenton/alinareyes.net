@@ -64,7 +64,9 @@ hr {
 
 .sidebar {
   &.sidebar-right {
-    border-left: solid @gray-lightest 1px;
+    @media (min-width: @screen-md-min) {
+      border-left: solid @gray-lightest 1px;
+    }
   }
   .block-container {
     /*

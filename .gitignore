@@ -15,6 +15,9 @@ tmp/
 /public/themes/html5up-strongly-typed/css
 /public/themes/html5up-strongly-typed/fonts
 
+# Books assets
+/public/books/
+
 # We don't want to version our internationalization content
 /app/data/i18n/*.yml
 

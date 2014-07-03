@@ -4,9 +4,11 @@
         <div class="block">
             <h3 class="block-title"><%=: 'home.blocks.books.title' | trans:locale %></h3>
             <div class="block-content">
-                <% books.forEach(function (book) { %>
-                    <% include ../partials/book-display %>
-                <% }) %>
+                <div class="row">
+                    <% books.forEach(function (book) { %>
+                        <% include ../partials/book-display %>
+                    <% }) %>
+                </div>
             </div>
         </div>
     </div><!-- end .books-container -->

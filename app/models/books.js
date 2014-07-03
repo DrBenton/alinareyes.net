@@ -38,6 +38,7 @@ var BookSchema = {
   virtuals: {
     cover_small_url: function () {
       return app.locals.interpolate(appConfig.books['cover.small.url'], {
+        '%base-url%': appConfig.general.baseUrl,
         '%book-slug%': this.get('slug')
       });
     },
