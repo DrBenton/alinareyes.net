@@ -1,8 +1,8 @@
-var ejs = require('ejs');
+var swig = require('swig');
 var _s = require('underscore.string');
 var app = require('../../app');
 
-ejs.filters.ellipsis = function(text, nbWords) {
+swig.setFilter('ellipsis', function(text, nbWords) {
     var str = String(text)
       , words = str.split(/ +/);
 
@@ -11,5 +11,5 @@ ejs.filters.ellipsis = function(text, nbWords) {
     }
 
     return _s.stripTags(words.slice(0, nbWords).join(' ')) + '...';
-};
+});
 

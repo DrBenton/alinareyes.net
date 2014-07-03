@@ -7,7 +7,6 @@ var router = express.Router();
 router.get('/', function(req, res) {
 
   var viewVars = {
-    layout: 'layouts/layout-main',
     locale: req.locales[0],
     req: req
   };
