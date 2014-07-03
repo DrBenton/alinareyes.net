@@ -3,6 +3,7 @@ var app = require('../../app');
 
 var router = express.Router();
 
+// Router specific middlewares & params handlers
 router.param('book_slug', function(req, res, next, slug) {
   app.models.books.forge({slug: slug}).fetch()
     .then(function (book) {
@@ -12,12 +13,14 @@ router.param('book_slug', function(req, res, next, slug) {
     .done();
 });
 
+
 /* GET book full display. */
 router.get('/:book_slug', function(req, res) {
 
   var viewVars = {
     layout: 'layouts/layout-main',
     locale: req.locales[0],
+    req: req,
     book: req.book
   };
 
@@ -31,6 +34,7 @@ router.get('/:book_slug/buy', function(req, res) {
   var viewVars = {
     layout: 'layouts/layout-main',
     locale: req.locales[0],
+    req: req,
     book: req.book
   };
 
@@ -44,8 +48,8 @@ router.post('/:book_slug/buy', function(req, res) {
   var viewVars = {
     layout: 'layouts/layout-main',
     locale: req.locales[0],
-    book: req.book,
-    request: req // debug only, remove it later...
+    req: req,
+    book: req.book
   };
 
   // Let's process our Stripe Payment!
@@ -54,15 +58,15 @@ router.post('/:book_slug/buy', function(req, res) {
     .then(
       function (charge) {
         viewVars.charge = charge;
+        // View rendering!
+        res.render('pages/book-download', viewVars);
       },
       function (err) {
         viewVars.paymentError = err;
+        req.flash('errors', err.raw.type);
+        res.redirect(app.get('config').general.baseUrl + '/books/' + req.book.get('slug') + '/buy');
       }
     )
-    .fin(function () {
-      // View rendering!
-      res.render('pages/book-bought', viewVars);
-    })
     .done();
 
 });

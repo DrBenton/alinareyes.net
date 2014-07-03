@@ -8,7 +8,8 @@ router.get('/', function(req, res) {
 
   var viewVars = {
     layout: 'layouts/layout-main',
-    locale: req.locales[0]
+    locale: req.locales[0],
+    req: req
   };
 
   // In Spain, *first* we retrieve data from our Model, *then* we render the View!

@@ -9,6 +9,8 @@
     "body-parser": "~1.0.0",
     "bookshelf": "^0.7.5",
     "checkit": "^0.2.0-pre",
+    "client-sessions": "^0.6.0",
+    "connect-flash": "^0.1.1",
     "connect-i18n": "git://github.com/DrBenton/connect-i18n.git#add-handled-languages-enum",
     "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",

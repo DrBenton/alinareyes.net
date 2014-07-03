@@ -12,7 +12,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressLayouts = require('express-ejs-layouts');
-var connectI18n = require('connect-i18n');
+var i18n = require('connect-i18n');
+var sessions = require('client-sessions');
+var flash = require('connect-flash');
 
 // App instance creation
 var app = express();
@@ -33,9 +35,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(sessions({
+  cookieName: 'sid', // cookie name dictates the key name added to the request object
+  secret: 'blargadeeblargblarg', // should be a large unguessable string
+  duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
+  activeDuration: 1000 * 60 * 5 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+}));
+app.use(flash());
 app.use(expressLayouts);
-app.use(connectI18n({default_locale: 'fr', handled_locales: ['fr']}));
+app.use(i18n({default_locale: 'fr', handled_locales: ['fr']}));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Initializers, go!
 app.initPromise = glob('app/initializers/*.js', { cwd: app.get('appRootPath')})
