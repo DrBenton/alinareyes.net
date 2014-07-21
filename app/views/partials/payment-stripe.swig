@@ -1,9 +1,11 @@
 <div class="stripe-payment">
 
-    {{ trans('book-buy.blocks.buy.stripe-form.intro', locale, {
-        '%book-title%': book.getTitle(locale),
-        '%book-price%': price(book.get('price'), locale)
-    }) | safe }}
+    <div class="intro">
+        {{ trans('book-buy.blocks.buy.stripe-form.intro', locale, {
+            '%book-title%': book.getTitle(locale),
+            '%book-price%': price(book.get('price'), locale)
+        }) | safe }}
+    </div>
 
     <form id="stripe-form" action="{{ baseUrl}}/books/{{ book.get('slug')}}/buy" method="POST">
         <!-- TODO: handle CSRF -->

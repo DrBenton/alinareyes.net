@@ -4,7 +4,7 @@
     <div class="page page-book-buy clearfix">
     
         <div class="row">
-            <div class="block-container book book-buy-display col-lg-12">
+            <div class="book book-buy-display col-lg-12">
                 <div class="block-container">
                     <div class="block block-buy">
                         <h3 class="block-title">

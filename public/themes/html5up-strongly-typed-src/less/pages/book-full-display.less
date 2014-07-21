@@ -36,6 +36,13 @@
     }
   }
 
+  hr.book-preview-container-separator {
+    @media (max-width: @screen-sm-max) {
+      // Remove the separator when blocks are displayed in "vertical mode"
+      display: none;
+    }
+  }
+
   .book-preview-container {
     .block-title {
       &:before {

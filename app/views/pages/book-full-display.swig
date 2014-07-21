@@ -4,7 +4,7 @@
     <div class="page page-book-full-display clearfix">
 
         <div class="row">
-            <div class="block-container book-full-display col-md-8">
+            <div class="book-full-display col-md-8">
                 <div class="block-container">
                     <div class="block block-book book">
                         <h3 class="block-title">
@@ -71,7 +71,7 @@
 
         </div><!-- end .row -->
 
-        <hr>
+        <hr class="book-preview-container-separator">
 
         <div class="row">
 

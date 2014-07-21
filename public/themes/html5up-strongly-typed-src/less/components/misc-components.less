@@ -34,6 +34,11 @@ hr {
 }
 
 .block-container {
+  @media (max-width: @screen-sm-max) {
+    // Adds a separator between blocks when they are displayed in "vertical mode"
+    border-bottom: 1px solid @gray-lightest;
+    margin-bottom: 3em;
+  }
   .block {
     .clearfix();
     margin: 0 0 2em 0;
