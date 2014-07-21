@@ -23,21 +23,28 @@
                                             {{ 'book-download.blocks.download.thank-you-for-buying' | trans(locale) }}
                                         </p>
                                     {% endif %}
-                                    {{ 'book-download.blocks.download.intro' | trans(locale) | safe }}
+                                    <div class="intro">
+                                        {{ 'book-download.blocks.download.intro' | trans(locale) | safe }}
+                                    </div>
 
                                     <div class="download-buttons-container">
+                                        <div class="download-buttons">
                                         {% for bookFormat in bookFormats %}
                                             <div class="book-download-block col-md-4">
-                                                {{ trans('book-download.blocks.download.format', locale, {
-                                                    '%format%': bookFormat
-                                                }) }}
-                                                <a href="#" class="button">
-                                                    {{ 'book-download.blocks.download.download' | trans(locale) }}
+                                                <h4 class="block-title">{{ bookFormat }}</h4>
+                                                <div class="intro">
+                                                    {{ trans('book-download.blocks.download.format-block.intro.' + bookFormat, locale, {
+                                                        '%format%': bookFormat
+                                                    }) }}
+                                                </div>
+                                                <a href="{{ baseUrl }}/books/{{ book.get('slug') }}/download/{{ bookFormat }}" class="button">
+                                                    {{ 'book-download.blocks.download.format-block.download' | trans(locale) }}
                                                 </a>
                                             </div>
                                         {% endfor %}
-                                    </div>
-                                </div>
+                                        </div><!-- end .download-buttons -->
+                                    </div><!-- end .download-buttons-container -->
+                                </div><!-- end .book-desc-container -->
                             </div><!-- end .row -->
                         </div><!-- end .block-content -->
                     </div><!-- end .block -->

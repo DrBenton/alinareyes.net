@@ -17,6 +17,8 @@ tmp/
 
 # Books assets
 /public/books/
+# e-books files
+/app/data/ebooks/*.*
 
 # We don't want to version our internationalization content
 /app/data/i18n/*.yml

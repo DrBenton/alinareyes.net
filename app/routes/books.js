@@ -7,14 +7,30 @@ var app = require('../../app');
 var appConfig = app.get('config');
 var router = express.Router();
 
+// Module consts
+var BOOKS_FORMATS =  ['epub', 'mobi', 'pdf'];
+
 // Router specific middlewares & params handlers
 router.param('book_slug', function(req, res, next, slug) {
-  Q(app.models.books.forge({slug: slug}).fetch())
-    .then(function (book) {
-      req.book = book;
-      next();
-    })
+  Q(app.models.books.forge({slug: slug}).fetch({require: true}))
+    .then(
+      function (book) {
+        req.book = book;
+        next();
+      },
+      function (err) {
+        next(new Error('failed to load book'));
+      }
+    )
     .done();
+});
+
+router.param('book_format', function(req, res, next, format) {
+  if (-1 === BOOKS_FORMATS.indexOf(format)) {
+    next(new Error('invalid ebook format'));
+  } else {
+    next();
+  }
 });
 
 // Specific helpers
@@ -73,6 +89,8 @@ function checkBookDownloadAccess(req) {
 }
 
 
+// Action!
+
 /* GET book full display. */
 router.get('/:book_slug', function(req, res) {
 
@@ -102,19 +120,13 @@ router.get('/:book_slug/buy', function(req, res) {
 /* POST book buy process (server-side Stripe payment process). */
 router.post('/:book_slug/buy', function(req, res) {
 
-  var viewVars = {
-    locale: req.locales[0],
-    req: req,
-    book: req.book
-  };
-
   // Let's process our Stripe Payment!
   var stripePaymentService = require('../services/payment-stripe');
   stripePaymentService.processBookPayment(req.book, req.body['stripe-token'])
     .then(
       function (charge) {
         // Successful payment!
-        // 1) we store in in DB...
+        // 1) we store it in DB...
         Q(app.collections.get('books_payments')
           .create({
             payment_id: charge.id,
@@ -168,11 +180,57 @@ router.get('/:book_slug/download', function(req, res) {
           locale: req.locales[0],
           req: req,
           book: req.book,
-          bookFormats: ['epub', 'mobi', 'pdf']
+          bookFormats: BOOKS_FORMATS
         };
 
         // View rendering!
         res.render('pages/book-download', viewVars);
+
+      } else {
+
+        req.flash('error', 'no access to this book!');
+        // Redirect to the "buy book" page!
+        var targetUrl = appConfig.general.baseUrl + '/books/' + req.book.get('slug') + '/buy';
+        res.redirect(targetUrl);
+
+      }
+    })
+    .fail(function (err) {
+      throw err;
+    })
+    .done();
+
+});
+
+/* GET book file download. */
+router.get('/:book_slug/download/:book_format', function(req, res) {
+
+  // All right, let's check that we have a proper authorization for the target book
+  checkBookDownloadAccess(req)
+    .then(function (accessGranted) {
+      if (accessGranted) {
+
+        // Book file download!
+        var bookFormat = req.params['book_format'];
+        var bookFilePath = app.locals.interpolate(appConfig.books['ebook.file.path'], {
+          '%app-root-path%': app.get('appRootPath'),
+          '%book-slug%': req.book.get('slug'),
+          '%book-format%': bookFormat
+        });
+        var bookDownloadedFileName = app.locals.interpolate(appConfig.books['ebook.file.name'], {
+          '%book-title%': req.book.getTitle(req.locales[0]),
+          '%book-slug%': req.book.get('slug'),
+          '%book-format%': bookFormat
+        });
+        res.download(bookFilePath, bookDownloadedFileName, function(err){
+          if (err) {
+            // handle error, keep in mind the response may be partially-sent
+            // so check res.headersSent
+            throw err;
+          } else {
+
+          }
+        });
 
       } else {
 

@@ -19,6 +19,9 @@
     img {
       display: inline-block;
       border: solid 6px @gray-lightest;
+      @media (max-width: @screen-sm-min) {
+        max-height: 400px;
+      }
     }
   }
   &.book-small-display .book-cover img {

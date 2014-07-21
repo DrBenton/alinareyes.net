@@ -3,10 +3,29 @@
 
 .page.page-book-download {
 
+  .intro {
+    .ebooks-formats-explanation {
+      li {
+        margin-bottom: 1em;
+      }
+    }
+  }
+
   .download-buttons-container {
     margin: 2em 0;
-    .book-download-block {
-      text-align: left;
+    .download-buttons {
+      .book-download-block {
+        text-align: left;
+        @media (max-width: @screen-md-max) {
+          margin-bottom: 3em;
+        }
+        .intro {
+          margin-bottom: 1em;
+          @media (min-width: @screen-md-min) {
+            min-height: 120px;
+          }
+        }
+      }
     }
   }
 
