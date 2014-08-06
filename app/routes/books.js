@@ -3,14 +3,20 @@ var _ = require('lodash');
 var Q = require('q');
 
 var app = require('../../app');
+var booksService = require('../services/books-service');
 
 var appConfig = app.get('config');
 var router = express.Router();
 
 // Module consts
 var BOOKS_FORMATS =  ['epub', 'mobi', 'pdf'];
+var BOOKS_FORMATS_MIME_TYPES = {
+  'epub': 'application/epub+zip',
+  'mobi': 'application/x-mobipocket-ebook',
+  'pdf': 'application/pdf'
+};
 
-// Router specific middlewares & params handlers
+// Router specific params handlers
 router.param('book_slug', function(req, res, next, slug) {
   Q(app.models.books.forge({slug: slug}).fetch({require: true}))
     .then(
@@ -33,79 +39,63 @@ router.param('book_format', function(req, res, next, format) {
   }
 });
 
-// Specific helpers
-function checkBookDownloadAccess(req) {
-  // All right, let's check that we have a valid authorization for the target book
-
-  var bookAuthorizationCheckPromise;
-
-  if (0 === req.book.get('price')) {
-
-    // Great, this books is free! There is no need to check anything...
-    bookAuthorizationCheckPromise = Q(true);
-
-  } else {
-
-    if (!req.session.booksChargesIds || 0 === req.session.booksChargesIds.length) {
-
-      // No "books charges ids" array in session: we refuse the download
-      bookAuthorizationCheckPromise = Q(false);
-
-    } else {
-
-      // Let's see which books we have bought during this session...
-      bookAuthorizationCheckPromise = Q(
-        app.collections.get('books_payments')
-          .query({
-           where: {
-             'id': req.session.booksChargesIds
-           }
-          })
-          .fetch({
-            columns: ['book_id']
-          })
-      );
-      bookAuthorizationCheckPromise = bookAuthorizationCheckPromise.then(
-          function (boughtBooks) {
-            if (boughtBooks.pluck('book_id').indexOf(req.book.id)) {
-              // We have bought books, but we don't have that one.
-              req.flash('error', 'boughtBooksIds=' + JSON.stringify(boughtBooks));
-              return false;
+// Router specific middlewares
+function checkBookDownloadAuthorization(redirectIfNoAuth) {
+  return function (req, res, next) {
+    // All right, let's check that we have a proper download authorization for the target book
+    booksService.checkBookDownloadAccess(req)
+      .then(function (accessGranted) {
+        switch (redirectIfNoAuth) {
+          case true:
+            if (accessGranted) {
+              next();
+            } else {
+              // Redirect to the "buy book" page!
+              req.flash('error', 'no access to this book!');
+              var targetUrl = appConfig.general.baseUrl + '/books/' + req.book.get('slug') + '/buy';
+              res.redirect(targetUrl);
             }
-
-            return true;
-          },
-          function (err) {
-            req.flash('error', JSON.stringify(err));
-            return false;
-          }
-        );
-
-    }
-
+            break;
+          case false:
+            // No "redirect if no book download authorization" policy: we just add a flag to the request
+            req.bookDownloadAuthorized = accessGranted;
+            next();
+            break;
+        }
+      })
+      .fail(function (err) {
+        throw err;
+      })
+      .done();
   }
-
-  return bookAuthorizationCheckPromise;
 }
-
 
 // Action!
 
 /* GET book full display. */
-router.get('/:book_slug', function(req, res) {
+router.get('/:book_slug', checkBookDownloadAuthorization(false), function(req, res) {
 
   var viewVars = {
     locale: req.locales[0],
     req: req,
-    book: req.book
+    book: req.book,
+    bookDownloadAuthorized: req.bookDownloadAuthorized
   };
 
   // View rendering!
   res.render('pages/book-full-display', viewVars);
+
 });
 
 /* GET book buy page display (client-side Stripe payment form). */
-router.get('/:book_slug/buy', function(req, res) {
+router.get('/:book_slug/buy', checkBookDownloadAuthorization(false), function(req, res) {
+
+  if (req.bookDownloadAuthorized) {
+    // This book is free or has been already bought: let's redirect to the download page!
+    var targetUrl = appConfig.general.baseUrl + '/books/' + req.book.get('slug') + '/download';
+    res.redirect(targetUrl);
+    return;
+  }
 
   var viewVars = {
     locale: req.locales[0],
@@ -169,82 +159,49 @@ router.post('/:book_slug/buy', function(req, res) {
 
 
 /* GET book download page display. */
-router.get('/:book_slug/download', function(req, res) {
+router.get('/:book_slug/download', checkBookDownloadAuthorization(true), function(req, res) {
 
-  // All right, let's check that we have a proper authorization for the target book
-  checkBookDownloadAccess(req)
-    .then(function (accessGranted) {
-      if (accessGranted) {
+  var viewVars = {
+    locale: req.locales[0],
+    req: req,
+    book: req.book,
+    bookFormats: BOOKS_FORMATS
+  };
 
-        var viewVars = {
-          locale: req.locales[0],
-          req: req,
-          book: req.book,
-          bookFormats: BOOKS_FORMATS
-        };
-
-        // View rendering!
-        res.render('pages/book-download', viewVars);
-
-      } else {
-
-        req.flash('error', 'no access to this book!');
-        // Redirect to the "buy book" page!
-        var targetUrl = appConfig.general.baseUrl + '/books/' + req.book.get('slug') + '/buy';
-        res.redirect(targetUrl);
-
-      }
-    })
-    .fail(function (err) {
-      throw err;
-    })
-    .done();
+  // View rendering!
+  res.render('pages/book-download', viewVars);
 
 });
 
 /* GET book file download. */
-router.get('/:book_slug/download/:book_format', function(req, res) {
+router.get('/:book_slug/download/:book_format', checkBookDownloadAuthorization(true), function(req, res) {
 
-  // All right, let's check that we have a proper authorization for the target book
-  checkBookDownloadAccess(req)
-    .then(function (accessGranted) {
-      if (accessGranted) {
+  // Book file download!
 
-        // Book file download!
-        var bookFormat = req.params['book_format'];
-        var bookFilePath = app.locals.interpolate(appConfig.books['ebook.file.path'], {
-          '%app-root-path%': app.get('appRootPath'),
-          '%book-slug%': req.book.get('slug'),
-          '%book-format%': bookFormat
-        });
-        var bookDownloadedFileName = app.locals.interpolate(appConfig.books['ebook.file.name'], {
-          '%book-title%': req.book.getTitle(req.locales[0]),
-          '%book-slug%': req.book.get('slug'),
-          '%book-format%': bookFormat
-        });
-        res.download(bookFilePath, bookDownloadedFileName, function(err){
-          if (err) {
-            // handle error, keep in mind the response may be partially-sent
-            // so check res.headersSent
-            throw err;
-          } else {
+  var bookFormat = req.params['book_format'];
 
-          }
-        });
+  var bookFilePath = app.locals.interpolate(appConfig.books['ebook.file.path'], {
+    '%app-root-path%': app.get('appRootPath'),
+    '%book-slug%': req.book.get('slug'),
+    '%book-format%': bookFormat
+  });
 
-      } else {
+  var bookDownloadedFileName = app.locals.interpolate(appConfig.books['ebook.file.name'], {
+    '%book-title%': req.book.getTitle(req.locales[0]),
+    '%book-slug%': req.book.get('slug'),
+    '%book-format%': bookFormat
+  });
 
-        req.flash('error', 'no access to this book!');
-        // Redirect to the "buy book" page!
-        var targetUrl = appConfig.general.baseUrl + '/books/' + req.book.get('slug') + '/buy';
-        res.redirect(targetUrl);
-
-      }
-    })
-    .fail(function (err) {
+  res.set('Content-Type: ', BOOKS_FORMATS_MIME_TYPES[bookFormat]);
+  res.download(bookFilePath, bookDownloadedFileName, function(err){
+    if (err) {
+      // handle error, keep in mind the response may be partially-sent
+      // so check res.headersSent
       throw err;
-    })
-    .done();
+    } else {
+      //TODO: increment download counter?
+    }
+  });
 
 });
 

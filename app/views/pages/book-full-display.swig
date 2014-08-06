@@ -32,6 +32,8 @@
                         <h3 class="block-title">
                             {% if book.isFree() %}
                                 {{ 'book-full-display.blocks.buy.title-free' | trans(locale) }}
+                            {% elseif bookDownloadAuthorized %}
+                                {{ 'book-full-display.blocks.buy.title-bought' | trans(locale) }}
                             {% else %}
                                 {{ 'book-full-display.blocks.buy.title' | trans(locale) }}
                             {% endif %}
@@ -57,6 +59,10 @@
                                 {% if book.isFree() %}
                                     <a href="{{ baseUrl }}/books/{{ book.get('slug') }}/download" class="button with-icon book-download">
                                         {{ 'book-full-display.blocks.buy.buy-free' | trans(locale) }}
+                                    </a>
+                                {% elseif bookDownloadAuthorized %}
+                                    <a href="{{ baseUrl }}/books/{{ book.get('slug') }}/download" class="button with-icon book-download">
+                                        {{ 'book-full-display.blocks.buy.buy-bought' | trans(locale) }}
                                     </a>
                                 {% else %}
                                     <a href="{{ baseUrl }}/books/{{ book.get('slug') }}/buy" class="button with-icon book-buy">
